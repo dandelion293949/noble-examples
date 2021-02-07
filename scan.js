@@ -42,10 +42,6 @@ const scanStart = () => {
       noble.stopScanning();
       for(let key in knownDevices) {
         const oldDeviceInfo = knownDevices[key];
-        if (oldDeviceInfo.rssi === -100) {
-          // RSSIが-100の時はスキャンできない状態のままなので確認せずに終了
-          continue;
-        }
         // ステータスがInでスキャンされてから3分以上、スキャンされていない場合はステータスをOutに変更する
         const limitTime = oldDeviceInfo.time + (1000*3);
         if (limitTime < Date.now()) {
@@ -56,9 +52,9 @@ const scanStart = () => {
             status: 'out',
             time: Date.now()
           };
-          knownDevices[key] = device;
           const now = new Date(device.time).toString();
           console.log(`${now} ${device.name}(${device.uuid}) RSSI${device.rssi} Status:${device.status}`);
+          delete knownDevices[key];
         }
       }
       noble.startScanning();
