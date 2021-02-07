@@ -30,12 +30,13 @@ const discovered = (peripheral) => {
       }
     }
     const now = new Date(device.time).toString();
-    console.log(`${now} ${device.name}(${device.uuid}) RSSI${device.rssi} Status:${device.status}`);
+    console.log(`${now} ${JSON.stringify(device)}`);
 
 }
 
 //BLE scan start
 const scanStart = () => {
+    console.log(`Scanning now...  rssi threshold ${limit}`);
     noble.startScanning();
     noble.on('discover', discovered);
     setInterval(() => {
@@ -53,7 +54,7 @@ const scanStart = () => {
             time: Date.now()
           };
           const now = new Date(device.time).toString();
-          console.log(`${now} ${device.name}(${device.uuid}) RSSI${device.rssi} Status:${device.status}`);
+          console.log(`${now} ${JSON.stringify(device)}`);
           delete knownDevices[key];
         }
       }
